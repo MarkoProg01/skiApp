@@ -1,0 +1,8 @@
+Šta emo dodati u ovom delu u okviru RESTFull servisa
+
+   METODA   ADRESA              FUNKCIJA             OPIS
+1. GET     /countries        getCountries
+2. GET     /countries/id     getCountryById
+3. POST    /countries        addCountry
+4. PUT     /coutries/id      updateCountry         PUT(UPDATE)
+5. DELETE  /countries/id     deleteCountry

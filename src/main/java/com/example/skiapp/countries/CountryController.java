@@ -1,25 +1,36 @@
 package com.example.skiapp.countries;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class CountryController {
+    @Autowired
+    CountryService service;
     @RequestMapping("/countries")
-    public List<Country> getCountries(){
-        //Business logic
-        //JSON
-        //Ovi podaci se ćesto smeštaju u Service klasu
-        ArrayList<Country> countries = new ArrayList<>();
-        countries.add(new Country(1,"Serbia","Serbia description"));
-        countries.add(new Country(2,"Slovenia","Slovenia description"));
-        countries.add(new Country(3,"Croatia","Croatia description"));
-        countries.add(new Country(4,"BIH","BIH description"));
-        countries.add(new Country(5,"Montenegro","Montenegro description"));
-        return countries;
-
+    public ArrayList<Country> getCountries(){
+        return service.getAllCountries();
     }
+    @RequestMapping("countries/{id}")
+    public Country getCountryById(@PathVariable int id){ // id u vitičastim zagradama iznad ce dati vrednost ovom int id
+        return service.getCountryById(id);
+    }
+    @RequestMapping(value = "/countries",method = RequestMethod.POST )
+    public void addCountry(@RequestBody Country country){
+        service.addCountry(country);
+    }
+    @RequestMapping(value = "/countries/{id}",method = RequestMethod.PUT)
+    public void updateCountry(@RequestBody Country country,@PathVariable int id){
+        service.updateCountry(country,id);
+    }
+
+    @RequestMapping(value = "countries/{id}",method = RequestMethod.DELETE)
+    public void removeCountryById(@PathVariable int id){ // id u vitičastim zagradama iznad ce dati vrednost ovom int id
+         service.removeCountryById(id);
+    }
+
 }
+
