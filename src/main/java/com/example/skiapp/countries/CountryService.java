@@ -1,82 +1,45 @@
 package com.example.skiapp.countries;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
+import java.util.Optional;
 
 @Service //Business Service(Biznis logika)
 public class CountryService {
-    private ArrayList<Country> countries = null;
+    @Autowired
+    CountryRepository repository;
 
 
     public CountryService() {
         super();
-        countries = new ArrayList<Country>();
-        countries.add(new Country(1,"Serbia","Serbia description"));
-        countries.add(new Country(2,"Slovenia","Slovenia description"));
-        countries.add(new Country(3,"Croatia","Croatia description"));
-        countries.add(new Country(4,"BIH","BIH description"));
-        countries.add(new Country(5,"Montenegro","Montenegro description"));
+
 
     }
-    public ArrayList<Country> getAllCountries(){
-        return countries;
+    public List<Country> getAllCountries(){
+        return repository.findAll();
     }
 
-    public Country getCountryById(int id) {
-        /*Ova funkcija trazi uneti id u listi i ako postoji
-        vrati nam sve elemente pod tim id-jem ,a ako nema tog
-        id,vrati null.
-         */
-        Iterator<Country> it = countries.iterator();
-        Country tempCountry;
-        while (it.hasNext()){
-            tempCountry = it.next();
-            if(tempCountry.getId() == id){
-                return tempCountry;
-            }
-        }
-        return null;
-
-        //Preko lamde
-       // return countries.stream().filter(t -> (t.getId()==id)).findFirst().get();
+    public Optional<Country> getCountryById(int id) { //Umesto public Country ide Optional<Country>
+       return repository.findById(id);
 
     }
 
     public void addCountry(Country country) {
-        countries.add(country);
+        repository.save(country);
+        /*Ako ubacimo iste podatke sa primarnim kljucem koji vec
+        postoji u bazi oon ce postojeci da zameni sa ovim koji unosimo*/
+
     }
 
-    public void updateCountry(Country country, int id) {
-        Iterator<Country> it = countries.iterator();
-        Country tempCountry;
-        int i=0;
-        while (it.hasNext()){
-            tempCountry = it.next();
-            if(tempCountry.getId() == id){
-                countries.set(i,country);
-                return;
-            }
-            i++;
-        }
-
+    public void updateCountry(Country country) {
+        repository.save(country);
     }
 
     public void removeCountryById(int id) {
-        Iterator<Country> it = countries.iterator();
-        Country tempCountry;
-        int i=0;
-        while (it.hasNext()){
-            tempCountry = it.next();
-            if(tempCountry.getId() == id){
-                countries.remove(i);
-                return;
-            }
-            i++;
-        }
+      repository.deleteById(id);
+     // repository.delete(country);
     }
 }

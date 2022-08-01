@@ -1,19 +1,27 @@
-package com.example.skiapp.countries;
+package com.example.skiapp.skiresorts;
+
+import com.example.skiapp.countries.Country;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-public class Country {
+public class SkiResort {
     @Id
     private int id;
     private String name;
     private String description;
+    @ManyToOne // 1 country ima više sky resort-ova
+    @JoinColumn(name = "country_id")
+    private Country country;
 
-    public Country() {
+
+    public SkiResort() {
     }
 
-    public Country(int id, String name, String description) {
+    public SkiResort(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -41,5 +49,13 @@ public class Country {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 }
